@@ -1,5 +1,6 @@
 package com.ivanshilyaev.weatherspringboot;
 
+import com.ivanshilyaev.weatherspringboot.bean.WeatherResponse;
 import com.ivanshilyaev.weatherspringboot.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -26,9 +27,9 @@ public class Controller {
 
     @GetMapping("/weather")
     public String weather(@ModelAttribute("city") String city, Model model) throws Exception {
-        String weather = service.getWeather(city);
+        WeatherResponse response = service.getWeather(city);
         model.addAttribute("city", city);
-        model.addAttribute("weather", weather);
+        model.addAttribute("response", response);
         return "weather";
     }
 }

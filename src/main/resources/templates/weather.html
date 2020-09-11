@@ -4,7 +4,15 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <div class="content">
-    <p>Weather in [[${city}]]: [[${weather}]]</p>
+    <h3>Weather in [[${city}]]</h3>
+    <p>
+        Temperature: [[${response.temperature}]] °C <br>
+        Feels like: [[${response.feelsLike}]] °C <br>
+        Description: [[${response.description}]] <br>
+        Pressure: [[${response.pressure}]] hPa <br>
+        Humidity: [[${response.humidity}]] % <br>
+        Visibility: [[${response.visibility}]] km <br>
+    </p>
     <form class="form" th:action="@{/main}" method="get">
         <input type="submit" value="MainPage">
     </form>

@@ -2,11 +2,13 @@ package com.ivanshilyaev.weatherspringboot.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ivanshilyaev.weatherspringboot.bean.WeatherResponse;
 import org.springframework.stereotype.Service;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -29,7 +31,7 @@ public class WeatherService {
         return (double) tmp / factor;
     }
 
-    public String getWeather(String city) throws Exception {
+    public WeatherResponse getWeather(String city) throws Exception {
         String urlString = "http://api.openweathermap.org/data/2.5/weather?q=" +
                 city + "&appid=" + API_KEY;
         URL url = new URL(urlString);
@@ -49,7 +51,27 @@ public class WeatherService {
         }
         Map<String, Object> responseMap = jsonToMap(result.toString());
         Map<String, Object> mainMap = jsonToMap(responseMap.get("main").toString());
+
+        WeatherResponse response = new WeatherResponse();
         double tempInKelvin = Double.parseDouble(mainMap.get("temp").toString());
-        return round(tempInKelvin - KELVIN_TO_CELSIUS, 2) + " °C";
+        response.setTemperature((int) (tempInKelvin - KELVIN_TO_CELSIUS));
+        double feelsLike = Double.parseDouble(mainMap.get("feels_like").toString());
+        response.setFeelsLike((int) (feelsLike - KELVIN_TO_CELSIUS));
+        int pressure = (int) Double.parseDouble(mainMap.get("pressure").toString());
+        response.setPressure(pressure);
+        int humidity = (int) Double.parseDouble(mainMap.get("humidity").toString());
+        response.setHumidity(humidity);
+
+        double visibility = round(Double.parseDouble(responseMap.get("visibility").toString()) / 1000, 1);
+        response.setVisibility(visibility);
+
+        List<Map<String, Object>> weather = (List<Map<String, Object>>) (responseMap.get("weather"));
+        Map<String, Object> weatherMap = weather.get(0);
+        String main = weatherMap.get("main").toString();
+        response.setMain(main);
+        String description = weatherMap.get("description").toString();
+        response.setDescription(description);
+
+        return response;
     }
 }
