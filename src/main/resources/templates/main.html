@@ -1,0 +1,20 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Main page</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<div class="content">
+    <h2>Select the city</h2>
+    <form class="form" th:action="@{/weather}" method="get">
+        <select name="city" id="city">
+            <dl th:each="city : ${cities}">
+                <dt>
+                    <option th:text="${city}"></option>
+                </dt>
+            </dl>
+        </select>
+        <br>
+        <input type="submit" value="Go!">
+    </form>
+</div>
+</html>
