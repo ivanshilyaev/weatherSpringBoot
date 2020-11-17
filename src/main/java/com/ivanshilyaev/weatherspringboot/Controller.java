@@ -14,10 +14,14 @@ import java.util.List;
 @org.springframework.stereotype.Controller
 public class Controller {
 
-    @Autowired
-    private WeatherService service;
+    private final WeatherService service;
 
-    private static List<String> cities = new ArrayList<>(Arrays.asList(new String[]{"Brest", "Vitebsk", "Gomel", "Grodno", "Mogilev", "Minsk"}));
+    private static final List<String> cities = new ArrayList<>(Arrays.asList("Brest", "Vitebsk", "Gomel", "Grodno", "Mogilev", "Minsk"));
+
+    @Autowired
+    public Controller(WeatherService service) {
+        this.service = service;
+    }
 
     @GetMapping("/main")
     public String main(Model model) {
@@ -26,7 +30,7 @@ public class Controller {
     }
 
     @GetMapping("/weather")
-    public String weather(@ModelAttribute("city") String city, Model model) throws Exception {
+    public String weather(Model model, @ModelAttribute("city") String city) throws Exception {
         WeatherResponse response = service.getWeather(city);
         model.addAttribute("city", city);
         model.addAttribute("response", response);
